@@ -32,6 +32,9 @@ int main() {
     float aht_min_hum = (float)(1UL << 31);
     float aht_max_hum = 0;
 
+
+    // uart_print("HELLO\n");
+
     // Main loop
     while (1) {
         uart_cursor_home();

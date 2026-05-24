@@ -8,6 +8,7 @@
 #include <stdint.h>
 
 #include "i2c.h"
+#include "uart.h"
 
 #define AHT20_ADDRESS (uint8_t)0x38
 

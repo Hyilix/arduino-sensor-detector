@@ -70,18 +70,25 @@ void aht20_init() {
     // Wait 40ms after power-on
     _delay_ms(100);
 
+    // uart_print("Started aht init\r\n");
+
     // Read status
-    i2c_start();
-    i2c_write(AHT20_ADDRESS << 1 | 0);
-    i2c_write(0x71);
-    i2c_stop();
+    // i2c_start();
+    // i2c_write(AHT20_ADDRESS << 1 | 0);
+    // i2c_write(0x71);
+    // i2c_stop();
 
-    i2c_start();
-    i2c_write(AHT20_ADDRESS << 1 | 1);
-    uint8_t status = i2c_read_ack();
-    i2c_stop();
+    // uart_print("Read Status\r\n");
 
-    if (!(status & (1 << 3))) {
+    // i2c_start();
+    // i2c_write(AHT20_ADDRESS << 1 | 1);
+    // uint8_t status = i2c_read_ack();
+    // i2c_stop();
+
+    // uart_print("Read Status 2\r\n");
+
+    // if (!(status & (1 << 3))) {
+        uart_print("Status OK\r\n");
         i2c_start();
         i2c_write(AHT20_ADDRESS << 1 | 0);
         i2c_write(0xBE);
@@ -91,7 +98,7 @@ void aht20_init() {
 
         // Wait 10ms after init
         _delay_ms(10);
-    }
+    // }
 }
 
 float aht20_read_temp() {
