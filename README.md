@@ -38,6 +38,14 @@ Electrical Parameters:
   * IDLE mode current @ 5V 16MHz: `~3.5 mA`
   * Power-down mode current: `~0.1 µA`
 
+### Block Diagram
+
+```
+  [FC-22]  ──── ADC (A0) ────┐
+  [BMP280] ──── I2C (A4/A5) ─┤─ ATmega328P ──── UART (TX) ──── PC
+  [AHT20]  ──── I2C (A4/A5) ─┘
+```
+
 ### Schematic
 
 ```
@@ -84,6 +92,19 @@ I2C logic voltage:
  * BMP280: `3.3V` (receiving `5V`. Level shifters required)
  * AHT20: `3.3V` (receiving `5V`. Level shifters required)
  * FC-22: `-`
+
+### Electrical Compatibility Discussion
+
+BMP280 operates at 3.3V but receives 5V I2C signals from the ATmega328P.
+
+The ATmega328P HIGH output threshold is ~0.7 × VCC = 3.5V, which exceeds
+the BMP280's maximum SDA/SCL voltage of 3.6V. This is marginally safe but
+level shifters are strongly recommended. 
+
+The AHT20 supports up to 5.5V so
+it is fully compatible with 5V I2C signals despite being powered at 3.3V.
+
+The FC-22 runs at 5V matching the MCU — no compatibility issues.
 
 ### Power Consumption
 
@@ -139,9 +160,43 @@ Obviously, the sampling rate can be reduced to read fewer times, being more ener
 
 ## Notes
 
+### More Sensors Used
+
+The circuit uses a variety of different sensors:
+ * FC-22 (analog, ADC): gas sensor
+ * BMP280 digital:
+   * temperature sensor
+   * pressure sensor
+ * AHT20 digital:
+   * temperature sensor
+   * humidity sensor
+
+### Practical Industrial Use Case
+
+This system could serve as a low-cost indoor air quality and
+environmental monitoring station. The FC-22 detects gas leaks,
+BMP280 monitors atmospheric pressure for weather prediction,
+and AHT20 tracks temperature and humidity for HVAC control.
+With sleep mode enabled, battery life exceeds 100 hours on a
+standard 2500mAh pack, making it suitable for wireless deployment.
+
+### AHT20 Sensor Used for Demonstration
+
 AHT20 sensor might be broken or damaged. Humidity is stuck at 99.99%, exception being that sometimes when it is touched it drops.
 Also, the temperature sensor appears to be working, until it is touched physically. If that happens, random values are being thrown.
 Still, it is being handled by the I2C protocol.
+
+### Compiler Optimizations
+
+Compiled with -Os (optimize for size) which reduces flash usage
+and improves cache efficiency on the ATmega328P's limited 32KB flash.
+
+### Sleep Implementation
+
+Power-down sleep is used between readings via the watchdog timer,
+reducing MCU current from 12mA to 0.1µA during the 500ms idle period.
+
+### Others
 
 The sampling rate can be changed in `utils.h`.
 
@@ -149,4 +204,4 @@ To compile, run `make` to generate executable, then `make flash` to upload file 
 
 To run, make sure the Arduino is plugged in a device. To run on linux, use command `screen /dev/ttyUSBx 9600`.
 
-
+To exit screen command, type `Ctrl + A + K`, then `y` and `enter`.
