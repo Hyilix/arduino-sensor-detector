@@ -1,3 +1,4 @@
+/* BMP280 temperature and pressure senzor */
 #ifndef BMP_H
 #define BMP_H
 

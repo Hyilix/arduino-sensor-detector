@@ -58,3 +58,14 @@ void uart_print_float(float val) {
     uart_print_uint16(decimal);
 }
 
+// Set the cursor at the top via uart
+void uart_cursor_home() {
+    uart_print("\033[H");
+}
+
+// Clear the screen via uart
+void uart_clear_screen() {
+    uart_print("\033[2J");
+    uart_cursor_home();
+}
+
