@@ -94,7 +94,7 @@ Current consumptions:
   * FC-22: `150 mA`
   * Arduino Uno board overhead (voltage regulator, USB, LEDs): `~50 mA`
 
-Roughly `212mA`, powered at `5V` -> `1.06W`
+Roughly `212mA`, powered at `5V` -> `1.06W`.
 
 #### Practical Case
 
@@ -106,7 +106,7 @@ Cells needed: ceil(5V / 1.2V) = `5 cells series` -> `6V`
 
 **Runtime:** 2500mAh / 212mA = `~11.8 hrs`
 
-> Capacity does not change when the cells are in series
+> Capacity does not change when the cells are in series.
 
 ### Power Reduction
 
@@ -131,10 +131,22 @@ Put the MCU into **power-down sleep** between readings:
 
 #### Replace FC-22 with SGP30
 
-FC-22 draws 150mA (Analog). SGP30 draws 48mA (I2C digital gas sensor)
+FC-22 draws 150mA (Analog). SGP30 draws 48mA (I2C digital gas sensor).
 
 #### Reduce Sampling Rate
 
-Obviously, the sampling rate can be reduced to read fewer times, being more energy consumption efficient
+Obviously, the sampling rate can be reduced to read fewer times, being more energy consumption efficient.
+
+## Notes
+
+AHT20 sensor might be broken or damaged. Humidity is stuck at 99.99%, exception being that sometimes when it is touched it drops.
+Also, the temperature sensor appears to be working, until it is touched physically. If that happens, random values are being thrown.
+Still, it is being handled by the I2C protocol.
+
+The sampling rate can be changed in `utils.h`.
+
+To compile, run `make` to generate executable, then `make flash` to upload file to MCU.
+
+To run, make sure the Arduino is plugged in a device. To run on linux, use command `screen /dev/ttyUSBx 9600`.
 
 
