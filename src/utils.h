@@ -1,7 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#define LOOP_SLEEP 200
+#define LOOP_SLEEP 2
 
 #define F_CPU 16000000UL
 #define SCL_FREQ 50000UL

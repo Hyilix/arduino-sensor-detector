@@ -4,11 +4,17 @@
 #include "uart.h"
 #include "bmp.h"
 #include "aht.h"
+#include "sleep.h"
 
 aht20_data_t aht_data;
 
+// Watchdog ISR - wakes the MCU
+ISR(WDT_vect) {}
+
 int main() {
     // Initialisation
+    watchdog_enable();
+
     i2c_init();
     adc_init();
     uart_init();
@@ -39,7 +45,7 @@ int main() {
     while (1) {
         uart_cursor_home();
 
-        uart_print("Sensors readings -- Refreshing every ");
+        uart_print("Sensors readings -- Refreshing every `250ms` * ");
         uart_print_uint16((uint16_t)LOOP_SLEEP);
         uart_print("ms\r\n");
 
@@ -221,7 +227,8 @@ int main() {
 
         /* ^^^ AHT20 handler ^^^ */
 
-        _delay_ms(LOOP_SLEEP);
+        // _delay_ms(LOOP_SLEEP);
+        sleep_250ms(LOOP_SLEEP);
     }
 }
 
