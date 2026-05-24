@@ -3,6 +3,12 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "utils.h"
+#include "i2c.h"
+#include "adc.h"
+#include "uart.h"
+#include "bmp.h"
+
 #define LOOP_SLEEP 500
 
 #define F_CPU 16000000UL
@@ -269,6 +275,7 @@ float bmp280_read_temp() {
 }
 
 float bmp280_read_pressure() {
+    // Read pressure
     uint8_t buf[3];
     i2c_read_register(BMP280_ADDR, 0xF7, buf, 3);
 
@@ -276,7 +283,7 @@ float bmp280_read_pressure() {
                       | ((int32_t)buf[1] << 4)
                       | (buf[2] >> 4);
 
-    // Bosch compensation formula — needs t_fine from temp calculation
+    // Compensation formula (Source: Bosch)
     int64_t var1 = ((int64_t)t_fine) - 128000;
     int64_t var2 = var1 * var1 * (int64_t)calib.P6;
     var2 = var2 + ((var1 * (int64_t)calib.P5) << 17);
@@ -293,7 +300,7 @@ float bmp280_read_pressure() {
     var2 = (((int64_t)calib.P8) * p) >> 19;
     p = ((p + var1 + var2) >> 8) + (((int64_t)calib.P7) << 4);
 
-    return (float)p / 256.0f;  // result in Pascals
+    return (float)p / 256.0f;
 }
 
 /* ^^^ BMP functions ^^^ */
@@ -326,12 +333,13 @@ int main() {
         // uart_print_uint16(bmp_id);
         // uart_print("\r\n");
 
-        // Print the temperature for the bmp280
+        // Print the temperature from the bmp280
         float temp = bmp280_read_temp();
         uart_print("BMP280 temperature val: ");
         uart_print_float(temp);
         uart_print(" C\r\n");
 
+        // Print the pressure from the bmp280
         float pressure = bmp280_read_pressure();
         uart_print("BMP280 pressure val: ");
         uart_print_float(pressure);
