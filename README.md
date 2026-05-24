@@ -6,6 +6,10 @@ Reading different sensors on an Arduino board
 
 Github repo: https://github.com/Hyilix/arduino-sensor-detector
 
+Video Youtube link: *Coming soon*
+
+> Video will be available as a file inside the repo
+
 Basic specs:
   * MCU: `atmega328p`
   * CLOCK: `16.000.000Hz` -> `16MHz`
@@ -17,7 +21,7 @@ Sensors used:
       * BMP280 (temperature + pressure): https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmp280-ds001.pdf
       * AHT20 (temperature + humidity): https://files.seeedstudio.com/wiki/Grove-AHT20_I2C_Industrial_Grade_Temperature_and_Humidity_Sensor/AHT20-datasheet-2020-4-16.pdf
 
-## Boring Stuff
+## Technical Reference
 
 ### MCU
 
@@ -55,6 +59,32 @@ Electrical Parameters:
                        └─────────────────────────────────┘
 ```
 
+### Electrical Parameters Comparison
+
+Supply voltage:
+ * ATmega328P: `1.8V – 5.5V`
+ * BMP280: `1.71V – 3.6V`
+ * AHT20: `2.0V – 5.5V`
+ * FC-22: `5V`
+
+Operating voltage:
+ * ATmega328P: `5V`
+ * BMP280: `3.3V`
+ * AHT20: `3.3V`
+ * FC-22: `5V`
+
+Current Consumption:
+ * ATmega328P: `~12 mA`
+ * BMP280: `~2.7 µA`
+ * AHT20: `~230 µA`
+ * FC-22: `~150 mA`
+
+I2C logic voltage:
+ * ATmega328P: `5V`
+ * BMP280: `3.3V` (receiving `5V`. Level shifters required)
+ * AHT20: `3.3V` (receiving `5V`. Level shifters required)
+ * FC-22: `-`
+
 ### Power Consumption
 
 Current consumptions:
@@ -69,13 +99,42 @@ Roughly `212mA`, powered at `5V` -> `1.06W`
 #### Practical Case
 
 Cell specs:
-  * 1.2V
-  * 2500 mAh
+  * Voltage: `1.2V`
+  * Capacity: `2500 mAh`
 
 Cells needed: ceil(5V / 1.2V) = `5 cells series` -> `6V`
-
-Could work with `4 cells` -> `4.8v` as well
 
 **Runtime:** 2500mAh / 212mA = `~11.8 hrs`
 
 > Capacity does not change when the cells are in series
+
+### Power Reduction
+
+#### AVR Sleep Modes
+
+Put the MCU into **power-down sleep** between readings:
+
+```
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  sleep_enable();
+  sleep_cpu();  // wakes on interrupt or watchdog timer
+```
+
+#### Disable Unused Peripherals
+
+```
+  // Disable SPI, USART, TWI when not in use
+  power_spi_disable();
+  power_usart0_disable();
+  power_twi_disable();
+```
+
+#### Replace FC-22 with SGP30
+
+FC-22 draws 150mA (Analog). SGP30 draws 48mA (I2C digital gas sensor)
+
+#### Reduce Sampling Rate
+
+Obviously, the sampling rate can be reduced to read fewer times, being more energy consumption efficient
+
+
