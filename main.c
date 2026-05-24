@@ -14,6 +14,22 @@ int main() {
 
     bmp280_read_calib();
 
+    // Initialise min-max values
+    uint16_t gas_min = (uint16_t)(1 << 15);
+    uint16_t gas_max = 0;
+
+    float bmp_min_temp = (float)(1UL << 31);
+    float bmp_max_temp = 0;
+
+    float bmp_min_prs = (float)(1UL << 31);
+    float bmp_max_prs = 0;
+
+    float aht_min_temp = (float)(1UL << 31);
+    float aht_max_temp = 0;
+
+    float aht_min_hum = (float)(1UL << 31);
+    float aht_max_hum = 0;
+
     // Main loop
     while (1) {
         uart_cursor_home();
@@ -22,11 +38,31 @@ int main() {
         uart_print_uint16((uint16_t)LOOP_SLEEP);
         uart_print("ms\r\n");
 
+        uart_print("\r\n");
+
         /* vvv FC-22 Analog handler vvv */
+        uart_print("FC-22 Analog (ADC) Readings:\r\n");
+
         uint16_t gas_adc_val = adc_read_channel(GAS_ANALOG_PIN);
 
-        uart_print("FC-22 analog GAS value: ");
+        if (gas_adc_val < gas_min) {
+            gas_min = gas_adc_val;
+        }
+
+        if (gas_adc_val > gas_max) {
+            gas_max = gas_adc_val;
+        }
+
+        uart_print("\tGAS current: ");
         uart_print_uint16(gas_adc_val);
+        uart_print("\r\n");
+
+        uart_print("\tGAS min: ");
+        uart_print_uint16(gas_min);
+        uart_print("\r\n");
+
+        uart_print("\tGAS max: ");
+        uart_print_uint16(gas_max);
         uart_print("\r\n");
 
         uart_print("\r\n");
@@ -42,16 +78,54 @@ int main() {
         // uart_print_uint16(bmp_id);
         // uart_print("\r\n");
 
+        uart_print("BMP280 Readings:\r\n");
+
         // Print the temperature from the bmp280
         float bmp_temp = bmp280_read_temp();
-        uart_print("BMP280 temperature val: ");
+
+        if (bmp_temp < bmp_min_temp) {
+            bmp_min_temp = bmp_temp;
+        }
+
+        if (bmp_temp > bmp_max_temp) {
+            bmp_max_temp = bmp_temp;
+        }
+
+        uart_print("\tTemperature current: ");
         uart_print_float(bmp_temp);
         uart_print(" C\r\n");
 
+        uart_print("\tTemperature min: ");
+        uart_print_float(bmp_min_temp);
+        uart_print(" C\r\n");
+
+        uart_print("\tTemperature max: ");
+        uart_print_float(bmp_max_temp);
+        uart_print(" C\r\n");
+
+        uart_print("\r\n");
+
         // Print the pressure from the bmp280
         float bmp_pressure = bmp280_read_pressure();
-        uart_print("BMP280 pressure val: ");
+
+        if (bmp_pressure < bmp_min_prs) {
+            bmp_min_prs = bmp_pressure;
+        }
+
+        if (bmp_pressure > bmp_max_prs) {
+            bmp_max_prs = bmp_pressure;
+        }
+
+        uart_print("\tPressure current: ");
         uart_print_float(bmp_pressure);
+        uart_print(" P\r\n");
+
+        uart_print("\tPressure min: ");
+        uart_print_float(bmp_min_prs);
+        uart_print(" P\r\n");
+
+        uart_print("\tPressure max: ");
+        uart_print_float(bmp_max_prs);
         uart_print(" P\r\n");
 
         uart_print("\r\n");
@@ -60,16 +134,54 @@ int main() {
 
         /* vvv AHT20 handler vvv */
 
+        uart_print("AHT20 Readings:\r\n");
+
         // Print the temperature from the aht20
         float aht_temp = aht20_read_temp();
-        uart_print("AHT20 temperature val: ");
+
+        if (aht_temp < aht_min_temp) {
+            aht_min_temp = aht_temp;
+        }
+
+        if (aht_temp > aht_max_temp) {
+            aht_max_temp = aht_temp;
+        }
+
+        uart_print("\tTemperature current: ");
         uart_print_float(aht_temp);
         uart_print(" C\r\n");
 
+        uart_print("\tTemperature min: ");
+        uart_print_float(aht_min_temp);
+        uart_print(" C\r\n");
+
+        uart_print("\tTemperature max: ");
+        uart_print_float(aht_max_temp);
+        uart_print(" C\r\n");
+
+        uart_print("\r\n");
+
         // Print the humidity from the aht20
         float aht_hum = aht20_read_hum();
-        uart_print("AHT20 humidity val: ");
+
+        if (aht_hum < aht_min_hum) {
+            aht_min_hum = aht_hum;
+        }
+
+        if (aht_hum > aht_max_hum) {
+            aht_max_hum = aht_hum;
+        }
+
+        uart_print("\tHumidity current: ");
         uart_print_float(aht_hum);
+        uart_print(" %RH\r\n");
+
+        uart_print("\tHumidity min: ");
+        uart_print_float(aht_min_hum);
+        uart_print(" %RH\r\n");
+
+        uart_print("\tHumidity max: ");
+        uart_print_float(aht_max_hum);
         uart_print(" %RH\r\n");
 
         /* ^^^ AHT20 handler ^^^ */
