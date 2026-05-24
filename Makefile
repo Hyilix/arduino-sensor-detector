@@ -15,7 +15,7 @@ AVRDUDE = avrdude
 CFLAGS  = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -DBAUD=$(BAUD) -Os -Wall
 
 # Source files
-SRCS    = main.c i2c.c adc.c uart.c bmp.c aht.c
+SRCS    = src/main.c src/i2c.c src/adc.c src/uart.c src/bmp.c src/aht.c
 OBJS    = $(SRCS:.c=.o)
 
 # Default target
