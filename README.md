@@ -183,7 +183,7 @@ standard 2500mAh pack, making it suitable for wireless deployment.
 ### AHT20 Sensor Used for Demonstration
 
 AHT20 sensor might be broken or damaged. Humidity is stuck at 99.99%, exception being that sometimes when it is touched it drops.
-Also, the temperature sensor appears to be working, until it is touched physically. If that happens, random values are being thrown.
+The temperature seems to be working.
 Still, it is being handled by the I2C protocol.
 
 ### Compiler Optimizations
