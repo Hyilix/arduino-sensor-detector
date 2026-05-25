@@ -25,7 +25,7 @@ Sensors used:
 
 ### MCU
 
-ATmega328P — 8-bit AVR RISC microcontroller by Microchip, mounted on Arduino Uno R3.
+ATmega328P: 8-bit AVR RISC microcontroller by Microchip, mounted on Arduino Uno R3.
 
 Datasheet: https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf
 
@@ -42,8 +42,8 @@ Electrical Parameters:
 
 ```
   [FC-22]  ──── ADC (A0) ────┐
-  [BMP280] ──── I2C (A4/A5) ─┤─ ATmega328P ──── UART (TX) ──── PC
-  [AHT20]  ──── I2C (A4/A5) ─┘
+  [BMP280] ──── I2C (SDA/SCL) ─┤─ ATmega328P ──── UART (TX) ──── PC
+  [AHT20]  ──── I2C (SDA/SCL) ─┘
 ```
 
 ### Schematic
@@ -54,11 +54,11 @@ Electrical Parameters:
                        │                                 │
           FC-22 ───────┤ A0 (ADC0)                       │
                        │                                 │
-         BMP280 ───────┤ A4 (SDA) ──── 4.7kΩ ── 3.3V     │
-         BMP280 ───────┤ A5 (SCL) ──── 4.7kΩ ── 3.3V     │
+         BMP280 ───────┤ SDA ──── 4.7kΩ ── 3.3V          │
+         BMP280 ───────┤ SCL ──── 4.7kΩ ── 3.3V          │
                        │                                 │
-          AHT20 ───────┤ A4 (SDA)                        │
-          AHT20 ───────┤ A5 (SCL)                        │
+          AHT20 ───────┤ SDA                             │
+          AHT20 ───────┤ SCL                             │
                        │                                 │
      BMP280 VCC ───────┤ 3.3V                            │
       AHT20 VCC ───────┤ 3.3V                            │
@@ -98,8 +98,7 @@ I2C logic voltage:
 BMP280 operates at 3.3V but receives 5V I2C signals from the ATmega328P.
 
 The ATmega328P HIGH output threshold is ~0.7 × VCC = 3.5V, which exceeds
-the BMP280's maximum SDA/SCL voltage of 3.6V. This is marginally safe but
-level shifters are strongly recommended. 
+the BMP280's maximum SDA/SCL voltage of 3.6V.
 
 The AHT20 supports up to 5.5V so
 it is fully compatible with 5V I2C signals despite being powered at 3.3V.
@@ -177,8 +176,6 @@ This system could serve as a low-cost indoor air quality and
 environmental monitoring station. The FC-22 detects gas leaks,
 BMP280 monitors atmospheric pressure for weather prediction,
 and AHT20 tracks temperature and humidity for HVAC control.
-With sleep mode enabled, battery life exceeds 100 hours on a
-standard 2500mAh pack, making it suitable for wireless deployment.
 
 ### AHT20 Sensor Used for Demonstration
 
@@ -205,3 +202,6 @@ To compile, run `make` to generate executable, then `make flash` to upload file 
 To run, make sure the Arduino is plugged in a device. To run on linux, use command `screen /dev/ttyUSBx 9600`.
 
 To exit screen command, type `Ctrl + A + K`, then `y` and `enter`.
+
+`uart.c` and `aht.c` has some other unused functions. They can be used for better manipulation of the output, or to read the sensors from the aht separately
+(aht20 gives all the data on a single request, and it is being processed all at once).
