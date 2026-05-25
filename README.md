@@ -6,7 +6,7 @@ Reading different sensors on an Arduino board
 
 Github repo: https://github.com/Hyilix/arduino-sensor-detector
 
-Video Youtube link: *Coming soon*
+Video Youtube link: https://www.youtube.com/watch?v=jLT6DfCp0Xs
 
 > Video will be available as a file inside the repo
 
