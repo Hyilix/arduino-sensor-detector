@@ -41,29 +41,29 @@ Electrical Parameters:
 ### Block Diagram
 
 ```
-  [FC-22]  ---- ADC (A0) --------#
-  [BMP280] ---- I2C (SDA/SCL) ---#---- ATmega328P --- UART (TX) --- PC
-  [AHT20]  ---- I2C (SDA/SCL) ---#
+     [FC-22]  ---- ADC (A0) --------#
+     [BMP280] ---- I2C (SDA/SCL) ---#---- ATmega328P --- UART (TX) --- PC
+     [AHT20]  ---- I2C (SDA/SCL) ---#
 ```
 
 ### Schematic
 
 ```
-                        Arduino Uno (ATmega328P - 5V, 16MHz)
+                       Arduino Uno (ATmega328P - 5V, 16MHz)
                        #---------------------------------#
-                       |                                 │
-          FC-22 -------| A0 (ADC0)                       │
-                       │                                 │
-         BMP280 -------| SDA - 3.3V                      │
-         BMP280 -------| SCL - 3.3V                      │
-                       │                                 │
-          AHT20 -------| SDA - 3.3V                      │
-          AHT20 -------| SCL - 3.3V                      │
-                       │                                 │
-     BMP280 VCC -------| 3.3V                            │
-      AHT20 VCC -------| 3.3V                            │
-      FC-22 VCC -------| 5V                              │
-        All GND -------| GND                             │
+                       |                                 |
+          FC-22 -------| A0 (ADC0)                       |
+                       |                                 |
+         BMP280 -------| SDA - 3.3V                      |
+         BMP280 -------| SCL - 3.3V                      |
+                       |                                 |
+          AHT20 -------| SDA - 3.3V                      |
+          AHT20 -------| SCL - 3.3V                      |
+                       |                                 |
+     BMP280 VCC -------| 3.3V                            |
+      AHT20 VCC -------| 3.3V                            |
+      FC-22 VCC -------| 5V                              |
+        All GND -------| GND                             |
                        #---------------------------------#
 ```
 
