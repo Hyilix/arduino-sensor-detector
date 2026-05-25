@@ -8,7 +8,7 @@ Github repo: https://github.com/Hyilix/arduino-sensor-detector
 
 Video Youtube link: https://www.youtube.com/watch?v=jLT6DfCp0Xs
 
-> Video will be available as a file inside the repo
+> Video available as file `Arduino_Sensor_Video.mp4`
 
 Basic specs:
   * MCU: `atmega328p`
