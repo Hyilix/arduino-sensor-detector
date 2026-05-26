@@ -1,14 +1,34 @@
 # Arduino Sensor Detector
 
-Reading different sensors on an Arduino board
+## Overview
+
+This Project consists of reading digital and analog sensors on an Arduino board.
+Featuring I2C for reading the digital sensors, UART for communicating with screen and ADC for Analog Digital Converter.
+
+This was done by manually writing to the corresponding registers of the MCU.
+
+It could be done importing an API to read directly, but where is the fun in that?
+
+I did use some functionality from the avr-gcc libraries (especially the Watchdog timer to enable sleep and enable/disable peripherals).
+Still, the hard work was done manually.
+
+This gave me a glimpse into embedded systems and (very) low level programming.
+
+It was really enjoyable reading the docs, writing to registers directly and destroying the FLASH of my Arduino for debugging.
 
 > Ursescu Sebastian - 325CA
+
+> Made for the university course **ED** (Digital Electronics)
+
+## External Links
 
 Github repo: https://github.com/Hyilix/arduino-sensor-detector
 
 Video Youtube link: https://www.youtube.com/watch?v=jLT6DfCp0Xs
 
 > Video available as file `Arduino_Sensor_Video.mp4`
+
+## General Info
 
 Basic specs:
   * MCU: `atmega328p`
@@ -89,8 +109,8 @@ Current Consumption:
 
 I2C logic voltage:
  * ATmega328P: `5V`
- * BMP280: `3.3V` (receiving `5V`. Level shifters required)
- * AHT20: `3.3V` (receiving `5V`. Level shifters required)
+ * BMP280: `3.3V` (receiving `5V`. Level shifters required, Arduino provides)
+ * AHT20: `3.3V` (receiving `5V`. Level shifters required, Arduino provides)
  * FC-22: `-`
 
 ### Electrical Compatibility Discussion
@@ -179,9 +199,9 @@ and AHT20 tracks temperature and humidity for HVAC control.
 
 ### AHT20 Sensor Used for Demonstration
 
-AHT20 sensor might be broken or damaged. Humidity is stuck at 99.99%, exception being that sometimes when it is touched it drops.
+AHT20 sensor might be broken or damaged. Humidity is stuck at 99.99%, except that it occasionally drops when the sensor is physically touched.
 The temperature seems to be working.
-Still, it is being handled by the I2C protocol.
+It still communicates correctly over I2C. (see `aht.c`)
 
 ### Compiler Optimizations
 
@@ -198,6 +218,7 @@ reducing MCU current from 12mA to 0.1µA during the 500ms idle period.
 The sampling rate can be changed in `utils.h`.
 
 To compile, run `make` to generate executable, then `make flash` to upload file to MCU.
+`avrdude` was used to upload file to MCU (see `make flash` in `Makefile`).
 
 To run, make sure the Arduino is plugged in a device. To run on linux, use command `screen /dev/ttyUSBx 9600`.
 
